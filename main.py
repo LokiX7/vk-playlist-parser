@@ -19,7 +19,8 @@ def get_page(url, headers):
 
 def get_content(response):
     soup = BeautifulSoup(response.text, 'html.parser')
-    block = soup.find('div', class_='AudioPlaylistSnippet__list AudioPlaylistSnippet__list--all')
+    playlist = soup.find('div', class_='AudioPlaylistSnippet__title').get_text().strip()
+    block = soup.find('div', class_='AudioPlaylistSnippet__body')
     items = block.find_all('div', class_='audio_row')
     soundtracks = []
 
@@ -31,15 +32,15 @@ def get_content(response):
             }
         )
 
-    return soundtracks
+    return soundtracks, playlist
+
 
 def save_data(data):
-    with open('music.txt', 'w') as file:
-        for item in data:
+    with open(data[1]+'.txt', 'w') as file:
+        for item in data[0]:
             line = f"{item['actor']} {item['name']}\n"
             file.write(line)
         
-
 
 def parser():
     url = get_url()
