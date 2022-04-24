@@ -1,5 +1,6 @@
-from bs4 import BeautifulSoup
+import os
 import requests
+from bs4 import BeautifulSoup
 
 
 HEADERS = {
@@ -36,9 +37,10 @@ def get_content(response):
 
 
 def save_data(data):
-    with open(data[1]+'.txt', 'w') as file:
+    os.makedirs('playlists', exist_ok=True)
+    with open(f'playlists/{data[1]}.txt', 'w') as file:
         for item in data[0]:
-            line = f"{item['actor']} {item['name']}\n"
+            line = f"{item['name']} - {item['actor']}\n"
             file.write(line)
         
 
